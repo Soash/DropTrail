@@ -1,4 +1,6 @@
-# DropTrail 🛒  
-**A Modern Dropshipping Platform**  
-🌐 [Visit DropTrail](https://bw.etrail.com.bd)
+# DropTrail 🛒 
+
+**A Modern Dropshipping Platform**
+
+🌐 **Live Demo**: [https://bw.etrail.com.bd](https://bw.etrail.com.bd)
 
