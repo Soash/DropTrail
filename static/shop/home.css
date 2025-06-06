@@ -1,0 +1,54 @@
+/* category-container */
+.category-container{
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.category{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+}
+.category img{
+  width:150px;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+.category a{
+  margin-top: 25px;
+  text-decoration: none;
+}
+/* category-container */
+
+
+
+
+
+
+
+
+
+/* CSS for mobile devices */
+@media only screen and (max-width: 768px) {
+
+  .category {
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .category img{
+    width:50px;
+  }
+  .category a {
+    margin-top: 5px;
+  }
+  .category-container {
+    gap: 0px;
+  }
+}
+

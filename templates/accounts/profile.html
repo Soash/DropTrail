@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="soash">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Profile</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="stylesheet" href="{% static 'accounts/profile.css' %}">
+  
+</head>
+<body>
+
+    <ul>
+        <li><a class="active" href="{% url 'home' %}">Bw eTrail</a></li>
+        <li><a href="{% url 'home' %}">Home</a></li>
+
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'signout' %}">Sign Out</a></li>
+        {% else %}
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'signin' %}">Sign In</a></li>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'profile' user.username %}">Profile</a>       
+          </li>
+        {% endif %}
+        {% if user.is_staff %}
+          <li>
+            <a href="{% url 'admintools' %}">Admin</a>
+          </li>
+        {% endif %}
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'policy' %}">Policy</a></li>
+    </ul>
+
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <strong>Message:</strong> {{ message }}
+        </div>
+    {% endfor %}
+
+    <h1 style="text-align:center;">Profile</h1>
+    
+    <div class="center">
+        <table class="profile">
+            <tr>
+                <td>Username</td>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td>Shop Name</td>
+                <td>{{ user.shopname }}</td>
+            </tr>
+            <tr>
+                <td>Name</td>
+                <td>{{ user.first_name }}</td>
+            </tr>
+            <tr>
+                <td>Gmail</td>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <td>bKash</td>
+                <td>{{ user.phone }}</td>
+            </tr>
+            <tr>
+                <td>Address</td>
+                <td>{{ user.address }}</td>
+            </tr>
+            <tr>
+                <td>Activation Date</td>
+                <td>{{ user.activation_date }}</td>
+            </tr>
+            <tr>
+                <td>Expiry Date</td>
+                <td>{{ user.expiry_date }}</td>
+            </tr>
+            <tr>
+                <td>Total Sell</td>
+                <td>{{ total_sell }} tk</td>
+            </tr>
+            <tr>
+                <td>Total Income</td>
+                <td>{{ paid_profit }} tk</td>
+            </tr>
+            <tr>
+                <td>Balance</td>
+                <td>{{ unpaid_profit }} tk</td>
+            </tr>
+            <tr>
+                <td>Account Status</td>
+                <td>
+                    {% if user.reseller_status == 'not_active' %}
+                        {{ user.get_reseller_status_display }}
+
+                        {% if pending_request %}
+                            | Pending
+                        {% else %}
+                            <br><br><div>To active your account make <b>Payment</b> 1000tk in bKash. <br>
+                            bKash Number: +8801580660031
+                            or </div><span class="bkash-span"> <img src="https://i.ibb.co/VVCFZmw/bkash.png" class=bkash-logo> <a href="https://shop.bkash.com/etrailcombd01580660031/paymentlink" class="bkash">Click here to Pay</a>
+                            </span>
+                            <form method="POST" action="{% url 'requestA' %}" class="form">{% csrf_token %}
+                                <div class="input-group">
+                                    <span class="input-group-text">+88</span>
+                                    <input type="text" name="phone" class="input-group-box" maxlength="11" required pattern="\d{11}" placeholder="Bkash number" title="Enter 11 digits for phone number">
+                                </div>            
+                                <input type="text" name="reference" placeholder="Reference" required>
+                                <input type="number" name="amount" placeholder="Amount" min=0 required>
+                                <input type="text" name="trxid" placeholder="TrxID" required>
+                                <button type="submit">Activate</button>
+                            </form>
+                        {% endif %}
+                    {% elif user.reseller_status == 'active' %}
+                        {{ user.get_reseller_status_display }}
+                    {% endif %}
+                </td>
+            </tr>
+            
+
+        </table>
+        
+        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+        {% if request.user == user %}
+            <a href="{% url 'signout' %}" class="button button-red" style="width: 120px;">Sign Out</a>
+            <a href="{% url 'update' %}" class="button button-blue" style="width: 120px;">Update Profile</a>
+
+            {% if can_request_payment %}
+            <form method="post" action="{% url 'request_payment' %}" style="text-align: center;">{% csrf_token %}
+                <button type="submit" class="button button-green" style="width: 190px;">Request Payment</button>
+            </form>
+            {% comment %} {% else %}
+            <form style="text-align: center;">
+                <button type="submit" class="button button-black" style="width: 190px;" disabled><del>Request Payment</del></button>
+            </form> {% endcomment %}
+            {% endif %}
+        {% endif %}
+            <a href="{% url 'user_payment_history' user.username %}" class="button button-gray" style="width: 120px;">Payment History</a>
+        </div>
+       
+    </div>  
+
+    <h1>Orders</h1>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Invoice</th>
+
+                    <th>Reseller</th>
+
+                    <th>Customer</th>
+      
+                    <th>Product</th>
+                    {% comment %} <th>Price</th> {% endcomment %}
+                    {% comment %} <th>Quantity</th> {% endcomment %}
+                    <th>Payment</th>
+                    <th>Payment</th>
+                    {% comment %} <th>Delivery Charge</th> {% endcomment %}
+                    {% comment %} <th>bKash</th> {% endcomment %}
+                    {% comment %} <th>Amount</th> {% endcomment %}
+
+                    {% comment %} <th>Cash on Delivery</th> {% endcomment %}
+
+                    
+                    <th>Status</th>
+                    {% comment %} <th>Order Status</th>
+                    <th>Delivery Status</th> {% endcomment %}
+                    <th>Invoice</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.invoice_no }} <br>
+                        {{ order.invoice_date }}</td>
+
+                    <td><a href="/accounts/{{ order.user }}">{{ order.user }}</a><br>
+                        Profit: {{ order.profit }}
+                    </td>
+
+                    <td>{{ order.name }} <br>
+                        {{ order.phone }} <br>
+                        {{ order.address }}</td>
+                    <td><a href="/category/{{ order.product.category.slug }}/{{ order.product.slug }}">{{ order.product_name }} </a>x {{ order.quantity }} <br>
+                    
+                        Main Price: {{ order.product_price }} <br>
+                        Sell Price: {{ order.sell_price }} <br>
+                        Delivery: {{ order.delivery_charge }}
+                    </td>
+                    {% comment %} <td>{{ order.quantity }}</td> {% endcomment %}
+                    {% comment %} <td>{{ order.profit }}</td> {% endcomment %}
+                    <td>Paid: {{ order.adv }} <br>
+                        CoD: {{ order.cod }}
+                        {% comment %} Delivery: {{ order.delivery_charge }} {% endcomment %}
+                    </td>
+                    <td>Number: {{ order.bKash }} <br>
+                        Reference: {{ order.reference }} <br>
+                        TrxID: {{ order.trxid }}</td>
+                    {% comment %} <td>{{ order.amount }}</td> {% endcomment %}
+                
+                    
+                    
+                    <td>
+                        {% comment %} Profit: {{ order.get_profit_status_display }} <br> {% endcomment %}
+                        Order: {{ order.get_order_status_display }} <br>
+                        Delivery: {{ order.get_delivery_status_display }}</td>
+                    <td>
+                        <a href="{% url 'generate_invoice_pdf' invoice_no=order.invoice_no %}"><i class="bi bi-download"></i></a>
+                    </td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <span>&copy; 2024 | <a href="https://soash.github.io">Soash</a></span>
+    </footer>
+
+</body>
+</html>
+
+

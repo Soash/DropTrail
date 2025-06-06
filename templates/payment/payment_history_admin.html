@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="soash">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment History - Admin</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+    <link rel="stylesheet" href="{% static 'payment/style.css' %}">
+</head>
+<body>
+
+  <ul>
+    <li><a class="active" href="{% url 'home' %}">Bw eTrail</a></li>
+    <li><a href="{% url 'home' %}">Home</a></li>
+
+    {% if user.is_authenticated %}
+        <li><a href="{% url 'signout' %}">Sign Out</a></li>
+    {% else %}
+        <li><a href="{% url 'signup' %}">Sign Up</a></li>
+        <li><a href="{% url 'signin' %}">Sign In</a></li>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+      <li>
+        <a href="{% url 'profile' user.username %}">Profile</a>       
+      </li>
+    {% endif %}
+    {% if user.is_staff %}
+      <li>
+        <a href="{% url 'admintools' %}">Admin</a>
+      </li>
+    {% endif %}
+    <li><a href="{% url 'contact' %}">Contact</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'policy' %}">Policy</a></li>
+</ul>
+
+    <h1>Payment History</h1>
+    <div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Reseller</th>
+                <th>Invoice Number</th>
+                <th>Profit</th>
+                <th>Requested Date</th>
+                <th>Phone Number</th>
+                <th>Transaction ID</th>
+                <th>Reference</th>
+                <th>Payment Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for history in payment_histories %}
+                <tr>
+                    <td>{{ history.id }}</td>
+                    <td><a href="/accounts/{{ history.user }}/">{{ history.user }}</a></td>
+                    <td>{{ history.invoice_number }}</td>
+                    <td>{{ history.total_profit }}</td>
+                    <td>{{ history.requested_date }}</td>
+                    <td>{{ history.phone_number }}</td>
+                    <td>{{ history.trxid }}</td>
+                    <td>{{ history.reference }}</td>
+                    <td>{{ history.date }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table></div>
+
+    <footer>
+        <span>&copy; 2024 | <a href="https://soash.github.io">Soash</a></span>
+    </footer>
+
+</body>
+</html>
+

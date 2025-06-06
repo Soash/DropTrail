@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="soash">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ category.name }} Products</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <link rel="stylesheet" href="{% static 'common.css' %}"/>
+    <link rel="stylesheet" href="{% static 'shop/category.css' %}"/>
+    <link rel="stylesheet" href="{% static 'shop/common.css' %}"/>
+
+    <style>
+        .text-container {
+            height: 35px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .text-content {
+            text-align: center;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+    </style>
+</head>
+<body>
+  
+    <ul>
+        <li><a class="active" href="{% url 'home' %}">Bw eTrail</a></li>
+        <li><a href="{% url 'home' %}">Home</a></li>
+
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'signout' %}">Sign Out</a></li>
+        {% else %}
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'signin' %}">Sign In</a></li>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'profile' user.username %}">Profile</a>       
+          </li>
+        {% endif %}
+        {% if user.is_staff %}
+          <li>
+            <a href="{% url 'admintools' %}">Admin</a>
+          </li>
+        {% endif %}
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'policy' %}">Policy</a></li>
+    </ul>
+  
+    <h1>{{ category.name }} Products</h1>
+    <div class="product-container">
+        {% for product in products %}
+        <div class="product">
+            <img src="{{ product.images.first.image.url }}">
+
+            <div class="text-container">
+                <div class="text-content">
+                    <span>{{ product.name }}</span>
+                </div>
+            </div>
+
+            <div>
+                {% if user.is_authenticated and user.reseller_status == 'active'%}
+                    <span style="font-size: smaller;">{{ product.price }} tk</span>
+                {% elif user.reseller_status == 'not_active'  %}
+                <span style="font-size: smaller;">Activate to view price</span>
+                {% else %}
+                    <span style="font-size: smaller;">Login to view price</span>
+                {% endif %}
+            </div>
+            <div>
+            <a href="{% url 'product' category_slug=category.slug product_slug=product.slug%}" class="button-6">View Details</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+   
+    <footer>
+        <span>&copy; 2024 | <a href="https://soash.github.io">Soash</a></span>
+    </footer>
+
+</body>
+</html>
+
+

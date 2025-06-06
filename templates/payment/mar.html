@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="soash">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Activation Requests</title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'common.css' %}">
+
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            padding: 10px; 
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <ul>
+        <li><a class="active" href="{% url 'home' %}">Bw eTrail</a></li>
+        <li><a href="{% url 'home' %}">Home</a></li>
+
+        {% if user.is_authenticated %}
+            <li><a href="{% url 'signout' %}">Sign Out</a></li>
+        {% else %}
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'signin' %}">Sign In</a></li>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'profile' user.username %}">Profile</a>       
+          </li>
+        {% endif %}
+        {% if user.is_staff %}
+          <li>
+            <a href="{% url 'admintools' %}">Admin</a>
+          </li>
+        {% endif %}
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'policy' %}">Policy</a></li>
+    </ul>
+
+    <h1>Manage Activation Requests</h1>
+
+    <div class="table-container">
+    <table style="font-size: 16px;">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Bkash</th>
+                <th>Reference</th>
+                <th>Amount</th>
+                <th>TrxID</th>
+                {% comment %} <th>Requested At</th> {% endcomment %}
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in activation_requests %}
+            <tr>
+                <td><a href="/accounts/{{ request.user.username }}/">{{ request.user.username }}</a></td>
+                <td>{{ request.phone }}</td>
+                <td>{{ request.reference }}</td>
+                <td>{{ request.amount }}</td>
+                <td>{{ request.trxid }}</td>
+                {% comment %} <td>{{ request.requested_at }}</td> {% endcomment %}
+                <td>
+                    {% if request.user.reseller_status != 'active' %}
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" value="{{ request.user.id }}">
+                        <button type="submit">Activate</button>
+                    </form>
+                    {% else %}
+                    Already Active
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table></div>
+
+    <footer>
+        <span>&copy; 2024 | <a href="https://soash.github.io">Soash</a></span>
+    </footer>
+
+</body>
+</html>
+
+

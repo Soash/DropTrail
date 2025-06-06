@@ -1,0 +1,34 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid black;
+}
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+
+
+.button {
+    background-color: #04AA6D; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+  
+.button-blue {background-color: #008CBA;} /* Blue */
+.button-green {background-color: #04AA6D;} /* Green */
+.button-red {background-color: #f44336;} /* Red */ 
+.button-gray {background-color: #e7e7e7; color: black;} /* Gray */ 
+.button-black {background-color: #555555;} /*black*/

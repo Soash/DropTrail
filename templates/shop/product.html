@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="soash">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ category.name }} Products</title>
+
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <link rel="stylesheet" href="{% static 'shop/product.css' %}"/>
+  <link rel="stylesheet" href="{% static 'common1.css' %}"/>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><a class="active" href="{% url 'home' %}">Bw eTrail</a></li>
+      <li><a href="{% url 'home' %}">Home</a></li>
+
+      {% if user.is_authenticated %}
+          <li><a href="{% url 'signout' %}">Sign Out</a></li>
+      {% else %}
+          <li><a href="{% url 'signup' %}">Sign Up</a></li>
+          <li><a href="{% url 'signin' %}">Sign In</a></li>
+      {% endif %}
+
+      {% if user.is_authenticated %}
+        <li>
+          <a href="{% url 'profile' user.username %}">Profile</a>       
+        </li>
+      {% endif %}
+      {% if user.is_staff %}
+        <li>
+          <a href="{% url 'admintools' %}">Admin</a>
+        </li>
+      {% endif %}
+      <li><a href="{% url 'contact' %}">Contact</a></li>
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'policy' %}">Policy</a></li>
+  </ul>
+  </nav>
+
+  <div class="slide-container">
+    <div class="slide">
+          {% for image in product.images.all %}
+          {% if forloop.first %}
+            <img src="{{ image.image.url }}" class="active1">
+          {% else %}
+            <img src="{{ image.image.url }}">
+          {% endif %}
+          {% endfor %}
+    </div>
+    <div class="controllers">
+          <button class="prev"><i class="fa-solid fa-chevron-left"></i></button>
+          <button class="next"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
+  <div>
+    <div class="product-details">
+        <h2>{{ product.name }}</h2>
+
+        <p>Original Price: <span id="price">{{ product.price }}</span></p>
+        <p>{{ product.description|safe }}</p>
+
+        <div class="center">
+          <button id="orderNowBtn" class="button-6">Order Now</button>
+        </div>
+    </div>
+      
+    <!-- Order Form -->
+    <div class="center">
+
+        <form id="orderForm" style="display: none;" method="post" action="{% url 'product' category_slug=product.category.slug product_slug=product.slug %}"> {% csrf_token %}
+
+          <div class="input-group">
+            <input type="number" id="sell_price" name="sell_price" placeholder="Sell price" maxlength="5" min="{{ product.price }}" step="1" required>
+          </div>
+          
+          <div class="input-group">
+            <input type="text" name="name" placeholder="Customer Name" maxlength="50" required>
+          </div>
+  
+          <div class="input-group">
+            <div class="input-group-addon">+88</div>
+            <input type="text" name="phone" placeholder="Customer Phone Number" maxlength="11" pattern="\d{11}" required>
+          </div>
+
+          <div class="input-group">
+            <input type="text" name="address" placeholder="Address" maxlength="150" required>
+          </div>
+
+          <div class="input-group">
+            <input type="number" id="quantity" name="quantity" placeholder="Quantity" maxlength="5" min="1" step="1" value="1" required>
+          </div>
+          
+          <p>Delivery Charge <br>
+            <input type="radio" id="advance" name="deliveryCharge" value="120" checked>
+            <label for="advance">Outside Dhaka - 120</label><br>
+
+            <input type="radio" id="full" name="deliveryCharge" value="50">
+            <label for="full">Inside Dhaka - 50</label><br>
+          </p>
+
+          <p>Payment <br>
+            <input type="radio" id="cash" name="payment" value="cash" checked>
+            <label for="cash">Cash on Delivery - <span id="cashPayment">{{ product.price|add:120 }}</span></label><br>
+
+            <input type="radio" id="advance" name="payment" value="adv">
+            <label for="advance">Advance - 100</label><br>
+
+            <input type="radio" id="full" name="payment" value="full">
+            <label for="full">Full Payment - <span id="fullPayment">{{ product.price|add:120 }}</span></label><br>
+          </p>
+          
+          
+          
+          
+      
+          
+          
+          
+          
+          
+          <br>
+
+            <div>To place order make <b>payment</b> in bKash<br>bKash Number: +8801580660031 or</div>
+            <span class="bkash-span"> <img src="https://i.ibb.co/VVCFZmw/bkash.png" class=bkash-logo> <a href="https://shop.bkash.com/etrailcombd01580660031/paymentlink" class="bkash">Click here to Pay</a></span><br>
+          
+
+          <div class="input-group">
+            <div class="input-group-addon">+88</div>
+            <input type="text" name="bKash" placeholder="bKash Number" maxlength="11" pattern="\d{11}" required>
+          </div>
+      
+          <div class="input-group">
+          <input type="number" name="amount" placeholder="Amount" min=0 required></div>
+
+          <div class="input-group">
+            <input type="text" id="trxid" name="trxid" placeholder="TrxID" required></div>
+
+          <div class="input-group">
+          <input type="text" name="reference" placeholder="Reference" required></div>
+
+          <div class="center">
+            <button type="submit" class="button-6">Place Order</button>
+          </div>
+        </form>
+        
+    </div>    
+  </div>
+            
+  <footer>
+    <span>&copy; 2024 | <a href="https://soash.github.io">Soash</a></span>
+  </footer>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'shop/home.js' %}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const originalInput = parseFloat(document.getElementById('price').innerText);
+      const sellInput = document.getElementById('sell_price');
+      const quantityInput = document.getElementById('quantity');
+      const deliveryInputs = document.querySelectorAll('input[name="deliveryCharge"]');
+      const fullPaymentSpan = document.getElementById('fullPayment');
+      const cashPaymentSpan = document.getElementById('cashPayment');
+
+      function calculateFullPayment() {
+        const sell_price = parseFloat(sellInput.value) || 0;
+        const original_price = originalInput || 0;
+
+        const profit = sell_price - original_price;
+
+        console.log("profit", profit);
+
+        const quantity = parseInt(quantityInput.value) || 1;
+        const deliveryCharge = parseFloat(document.querySelector('input[name="deliveryCharge"]:checked')?.value) || 0;
+
+
+        const fullPayment = (original_price + profit) * quantity + deliveryCharge;
+
+        console.log("fullPayment", fullPayment);
+
+        fullPaymentSpan.innerText = fullPayment;
+        cashPaymentSpan.innerText = fullPayment;
+      }
+
+      sellInput.addEventListener('input', calculateFullPayment);
+      quantityInput.addEventListener('input', calculateFullPayment);
+      deliveryInputs.forEach(input => input.addEventListener('change', calculateFullPayment));
+    });
+  </script>
+    
+</body>
+</html>
+

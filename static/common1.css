@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap'); 
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Josefin Sans", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+}
+
+footer{
+    margin-top: auto;
+}
+
+
+
+h1{
+    text-align: center;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+nav li {
+    float: left;
+}
+nav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+nav li a:hover:not(.active) {
+    background-color: #111;
+}
+nav li a:hover {
+    text-decoration: none;
+}
+.active {
+    background-color: #04AA6D;
+}
+
+
+
+
+
+.button {
+    background-color: #04AA6D; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+  
+.button-blue {background-color: #008CBA;} /* Blue */
+.button-green {background-color: #04AA6D;} /* Green */
+.button-red {background-color: #f44336;} /* Red */ 
+.button-gray {background-color: #e7e7e7; color: black;} /* Gray */ 
+.button-black {background-color: #555555;} /*black*/
+
+
+
+
+
+
+footer {
+    background-color: #333;
+    padding: 10px;
+    text-align: center;
+}
+
+footer span {
+    color: #f2f2f2;
+}
+
+footer a {
+    color: #f2f2f2;
+    /* Link color (blue) */
+    text-decoration: none;
+    /* Remove underline from link */
+    font-weight: bold;
+    /* Make link text bold */
+}
+
+footer a:hover {
+    color: tomato;
+    /* Change link color on hover (darker blue) */
+}
+
+.alert {
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+
+.bkash{
+    background: #e2136e;
+    padding: 5px 10px;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+}
+.bkash-logo{
+    width: 20px;
+    margin-right: 10px;
+}
+.bkash-span{
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="soash">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .invoice {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        .invoice-total {
+            margin-top: 20px;
+            text-align: right;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .table-container {
+            overflow-x: auto;
+            white-space: nowrap;
+            font-size: 10px;
+        }
+        .info{
+            display: flex;
+            justify-content: space-evenly;
+            margin-bottom: 25px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        @media only screen and (max-width: 768px) {
+            .invoice {
+                width: 90%;
+            }
+            .info{
+                justify-content: center;
+               
+            }
+            .sc-info{
+                font-size: smaller;
+                width: 100%;
+            }
+          }
+    </style>
+</head>
+<body>
+
+    <div class="invoice">
+        <div class="header">
+            <h2>Invoice</h2>
+            <p style="text-align: left; font-size: small;">Invoice No: {{order.invoice_no}} <br> Invoice Date: {{order.invoice_date}}</p>
+        </div>
+
+        <div class="info">
+   
+            <div class="sc-info">
+                <h3>Seller Information</h3>
+                <p>Shop Name: {{ order.user.shopname }}</p>
+                <p>Seller Name: {{ order.user.first_name }}</p>
+                <p>Phone: +88{{ order.user.phone }}</p>
+                <p>Gmail: {{ order.user.email }}</p>
+                <p>Address: {{ order.user.address }}</p>
+            </div>
+        
+            <div class="sc-info">
+                <h3>Customer Information</h3>
+                <p>Customer Name: {{ order.name }}</p>
+                <p>Phone: +88{{ order.phone }}</p>
+                <p>Address: {{ order.address }}</p>
+            </div>
+
+        </div>
+
+        <div class="table-container">
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ order.product_name }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>{{ order.sell_price }}</td>
+                    <td>{{ total  }}</td>
+                </tr>
+                <tr>
+                    <td colspan='3'>Delivery Charge</td>
+                    <td>+ {{order.delivery_charge}}</td>
+                </tr>
+                <tr>
+                    <td colspan='3'>Advance Paid</td>
+                    <td>- {{order.adv}}</td>
+                </tr>
+                <tr>
+                    <td colspan='3'>Cash on Delivery</td>
+                    <td><b>{{order.cod}}</b></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
